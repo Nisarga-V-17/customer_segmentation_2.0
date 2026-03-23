@@ -1,19 +1,17 @@
 import pandas as pd
 from sklearn.cluster import KMeans
 
-# Sample mall data
-data = {
-    "Income": [15, 16, 17, 40, 42, 43, 70, 72, 74, 90, 92, 95],
-    "Spending": [39, 40, 42, 60, 61, 65, 20, 21, 19, 80, 82, 85]
-}
+df = pd.read_excel("mall_customers.xlsx")
 
-df = pd.DataFrame(data)
+# Clean column names (just in case)
+df.columns = df.columns.str.strip()
 
-# KMeans model
-kmeans = KMeans(n_clusters=3)
+print("Columns:", df.columns)
 
-kmeans.fit(df)
+# Use last 2 columns
+X = df.iloc[:, -2:]
 
-df["Cluster"] = kmeans.labels_
+kmeans = KMeans(n_clusters=3, random_state=0, n_init=10)
+df["Cluster"] = kmeans.fit_predict(X)
 
-print(df)
+print(df.head())
